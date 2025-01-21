@@ -19,7 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Courier);
     let page = pdfDoc.addPage();
-    const fontSize = 10;
+    const fontSize = 8;
     const { width, height } = page.getSize();
     const lineHeight = fontSize + 4;
 
