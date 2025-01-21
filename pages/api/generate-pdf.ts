@@ -18,19 +18,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Courier);
-    let page = pdfDoc.addPage();
     const fontSize = 8;
-    const { width, height } = page.getSize();
     const lineHeight = fontSize + 4;
 
+    // Calculate required page height based on content
     const lines = content.split("\n");
-    let yPosition = height - 50;
+    const requiredHeight = lines.length * lineHeight + 100; // 100 for margins
+    const pageWidth = 612; // Standard US Letter width in points
 
+    // Create a single page with custom dimensions
+    const page = pdfDoc.addPage([pageWidth, requiredHeight]);
+    let yPosition = requiredHeight - 50; // Start from top with margin
+
+    // Draw all text on the single page
     for (const line of lines) {
-      if (yPosition < 50) {
-        page = pdfDoc.addPage();
-        yPosition = height - 50;
-      }
       page.drawText(line, {
         x: 50,
         y: yPosition,
